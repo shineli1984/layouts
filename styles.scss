@@ -1,0 +1,230 @@
+//// style for testing
+//body {
+//  margin: 2rem;
+//  background-color: #333;
+//  border: 1px wheat solid;
+//}
+
+.l-h {
+  background-color: white;
+  color: #ffa993;
+}
+
+.l-h > .item {
+  background-color: #845784;
+}
+
+// utils
+
+/// Replace `$search` with `$replace` in `$string`
+/// @author Hugo Giraudel
+/// @param {String} $string - Initial string
+/// @param {String} $search - Substring to replace
+/// @param {String} $replace ('') - New value
+/// @return {String} - Updated string
+@function str-replace($string, $search, $replace: '') {
+  $index: str-index($string, $search);
+
+  @if $index {
+    @return str-slice($string, 1, $index - 1) + $replace + str-replace(str-slice($string, $index + str-length($search)), $search, $replace);
+  }
+
+  @return $string;
+}
+
+@function pow($x, $n) {
+  $ret: 1;
+
+  @if $n >= 0 {
+    @for $i from 1 through $n {
+      $ret: $ret * $x;
+    }
+  } @else {
+    @for $i from $n to 0 {
+      $ret: $ret / $x;
+    }
+  }
+  @return $ret;
+}
+
+
+// start actual styles
+
+// horizontal layout
+.l-h {
+  display: flex;
+}
+
+.l-h > .item {
+  flex-grow: 1;
+}
+
+// fixed items per row
+.l-h.l-h-items {
+  flex-wrap: wrap;
+}
+
+.l-h.l-h-items > .item {
+  flex-shrink: 0;
+  flex-grow: 0;
+  word-break: break-all;
+}
+
+$maxItems: 12;
+$gapSize: 1/10;
+$maxGaps: 40;
+
+@for $j from 1 through $maxItems {
+  .l-h.l-h-items.l-h-items-#{$j} {
+    > .item {
+      flex-basis: percentage(1/$j);
+    }
+  }
+}
+
+// gaps between items
+@for $i from 1 through $maxGaps {
+  $size: $gapSize * $i;
+  $className: str-replace(inspect($size), ".", "-");
+
+  .l-h.l-h-#{$className} {
+    margin-right: -#{$size}rem;
+  }
+
+  .l-h.l-h-#{$className} > .item {
+    margin-right: #{$size}rem;
+  }
+
+  .l-h.l-h-#{$className} > .item:last-child {
+    margin-right: 0;
+  }
+
+  // fixed item with gap between items
+  @for $j from 1 through $maxItems {
+    .l-h.l-h-#{$className}.l-h-items.l-h-items-#{$j} {
+      > .item {
+        flex-basis: calc(#{percentage(1/$j)} - #{$size}rem);
+      }
+    }
+  }
+}
+
+@media (min-width: 1201px) {
+  @for $j from 1 through $maxItems {
+    .l-h.l-h-items.l-h-items-xlg-down-#{$j} {
+      > .item {
+        flex-basis: percentage(1/$j);
+      }
+    }
+  }
+
+  @for $i from 1 through $maxGaps {
+    $size: $gapSize * $i;
+    $className: str-replace(inspect($size), ".", "-");
+
+    // fixed item with gap between items
+    @for $j from 1 through $maxItems {
+      .l-h.l-h-#{$className}.l-h-items.l-h-items-xlg-down-#{$j} {
+        > .item {
+          flex-basis: calc(#{percentage(1/$j)} - #{$size}rem);
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 1200px) and (min-width: 993px) {
+  @for $j from 1 through $maxItems {
+    .l-h.l-h-items.l-h-items-lg-down-#{$j} {
+      > .item {
+        flex-basis: percentage(1/$j);
+      }
+    }
+  }
+
+  @for $i from 1 through $maxGaps {
+    $size: $gapSize * $i;
+    $className: str-replace(inspect($size), ".", "-");
+
+    // fixed item with gap between items
+    @for $j from 1 through $maxItems {
+      .l-h.l-h-#{$className}.l-h-items.l-h-items-lg-down-#{$j} {
+        > .item {
+          flex-basis: calc(#{percentage(1/$j)} - #{$size}rem);
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 992px) and (min-width: 769px) {
+  @for $j from 1 through $maxItems {
+    .l-h.l-h-items.l-h-items-md-down-#{$j} {
+      > .item {
+        flex-basis: percentage(1/$j);
+      }
+    }
+  }
+
+  @for $i from 1 through $maxGaps {
+    $size: $gapSize * $i;
+    $className: str-replace(inspect($size), ".", "-");
+
+    // fixed item with gap between items
+    @for $j from 1 through $maxItems {
+      .l-h.l-h-#{$className}.l-h-items.l-h-items-md-down-#{$j} {
+        > .item {
+          flex-basis: calc(#{percentage(1/$j)} - #{$size}rem);
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) and (min-width: 555px) {
+  @for $j from 1 through $maxItems {
+    .l-h.l-h-items.l-h-items-sm-down-#{$j} {
+      > .item {
+        flex-basis: percentage(1/$j);
+      }
+    }
+  }
+
+  @for $i from 1 through $maxGaps {
+    $size: $gapSize * $i;
+    $className: str-replace(inspect($size), ".", "-");
+
+    // fixed item with gap between items
+    @for $j from 1 through $maxItems {
+      .l-h.l-h-#{$className}.l-h-items.l-h-items-sm-down-#{$j} {
+        > .item {
+          flex-basis: calc(#{percentage(1/$j)} - #{$size}rem);
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 554px) {
+  @for $j from 1 through $maxItems {
+    .l-h.l-h-items.l-h-items-xs-down-#{$j} {
+      > .item {
+        flex-basis: percentage(1/$j);
+      }
+    }
+  }
+
+  @for $i from 1 through $maxGaps {
+    $size: $gapSize * $i;
+    $className: str-replace(inspect($size), ".", "-");
+
+    // fixed item with gap between items
+    @for $j from 1 through $maxItems {
+      .l-h.l-h-#{$className}.l-h-items.l-h-items-xs-down-#{$j} {
+        > .item {
+          flex-basis: calc(#{percentage(1/$j)} - #{$size}rem);
+        }
+      }
+    }
+  }
+}
