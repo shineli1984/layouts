@@ -5,12 +5,12 @@
 //  border: 1px wheat solid;
 //}
 
-.l-h {
+.l-h, l-v {
   background-color: white;
   color: #ffa993;
 }
 
-.l-h > .item {
+.item {
   background-color: #845784;
 }
 
@@ -55,7 +55,7 @@
   display: flex;
 }
 
-.l-h > .item {
+.l-h.l-h-g > .item {
   flex-grow: 1;
 }
 
@@ -138,5 +138,24 @@ $screenSizes: xlg lg md sm xs;
         }
       }
     }
+  }
+}
+
+// vertical
+.l-v {
+  display: flex;
+  flex-direction: column;
+}
+
+@for $i from 1 through $maxGaps {
+  $size: $gapSize * $i;
+  $className: str-replace(inspect($size), ".", "-");
+
+  .l-v.l-v-#{$className} {
+    margin-bottom: -#{$size}rem;
+  }
+
+  .l-v.l-v-#{$className} > .item {
+    margin-bottom: #{$size}rem;
   }
 }
